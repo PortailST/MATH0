@@ -3,63 +3,148 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Emploi du temps de rentrée</title>
+<title>Emploi du temps compact</title>
 <style>
   body {
     font-family: Arial, sans-serif;
-    padding: 10px;
-    max-width: 800px;
+    max-width: 400px;
     margin: auto;
-  }
-  h2 {
-    text-align: center;
-    margin-top: 10px;
-  }
-  .day {
-    background: #f0f0f0;
-    border-radius: 8px;
     padding: 10px;
-    margin-bottom: 15px;
+    text-align: center;
   }
-  .day h3 {
+  select {
+    margin: 10px;
+    padding: 5px;
+    font-size: 16px;
+  }
+  .day-container {
+    background: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+    min-height: 150px;
+  }
+  h3 {
     margin-top: 0;
-    font-size: 20px;
-    color: #333;
   }
   .event {
-    margin-bottom: 8px;
+    margin: 8px 0;
     line-height: 1.4;
+    font-size: 15px;
   }
-  @media (max-width: 600px) {
-    .day h3 { font-size: 18px; }
-    .event { font-size: 14px; }
+  .nav-buttons {
+    margin-top: 10px;
+  }
+  .nav-buttons button {
+    padding: 5px 10px;
+    margin: 0 10px;
+    font-size: 16px;
+    cursor: pointer;
   }
 </style>
 </head>
 <body>
 
-<h2>Emploi du temps du 1 au 3 septembre</h2>
+<h2>Emploi du temps</h2>
 
-<div class="day">
-  <h3>Lundi</h3>
-  <div class="event"><strong>Réunion de pré rentrées</strong><br>Portail ST (OUI SI)<br>11h15 – 12h15 / AMPHI INFO</div>
-  <div class="event"><strong>Réunion de pré rentrées</strong><br>Portail ST<br>Noms de A à L inclus<br>13h - 15h / AMPHI PV</div>
-  <div class="event"><strong>Réunion de pré rentrées</strong><br>Portail ST<br>Noms de A à Z inclus<br>15h15 - 17h15 / AMPHI PV</div>
+<select id="group-select">
+  <option value="groupeA">Groupe A</option>
+  <option value="groupeB">Groupe B</option>
+</select>
+
+<div class="day-container" id="day-content">
+  <!-- contenu du jour -->
 </div>
 
-<div class="day">
-  <h3>Mardi</h3>
-  <div class="event"><strong>TD MATHS0</strong><br>10h15 - 12h15<br>SALLE M11</div>
-  <div class="event"><strong>Présentation Licence Physique</strong><br>13h – 15h<br>AMPHI PV</div>
-  <div class="event"><strong>Présentation Licence Chimie</strong><br>15h15 – 17h15<br>AMPHI PV</div>
+<div class="nav-buttons">
+  <button onclick="prevDay()">⬅</button>
+  <button onclick="nextDay()">➡</button>
 </div>
 
-<div class="day">
-  <h3>Mercredi</h3>
-  <div class="event"><strong>FORUM D’ACCUEIL</strong><br>9h30 – 13h<br>BU</div>
-  <div class="event"><strong>ATELIERS OBLIGATOIRES</strong><br>10h15 – 11h15<br>Bâtiment M</div>
-  <div class="event"><strong>TD MATHS0</strong><br>15h15 - 17h15<br>SALLE M11</div>
-</div>
+<script>
+  const data = {
+    groupeA: [
+      {
+        day: "Lundi",
+        events: [
+          "Réunion de pré rentrées<br>Portail ST (OUI SI)<br>11h15 – 12h15 / AMPHI INFO",
+          "Réunion de pré rentrées<br>Portail ST<br>Noms de A à L inclus<br>13h - 15h / AMPHI PV",
+          "Réunion de pré rentrées<br>Portail ST<br>Noms de A à Z inclus<br>15h15 - 17h15 / AMPHI PV"
+        ]
+      },
+      {
+        day: "Mardi",
+        events: [
+          "TD MATHS0<br>10h15 - 12h15<br>SALLE M11",
+          "Présentation Licence Physique<br>13h – 15h<br>AMPHI PV",
+          "Présentation Licence Chimie<br>15h15 – 17h15<br>AMPHI PV"
+        ]
+      },
+      {
+        day: "Mercredi",
+        events: [
+          "FORUM D’ACCUEIL<br>9h30 – 13h<br>BU",
+          "ATELIERS OBLIGATOIRES<br>10h15 – 11h15<br>Bâtiment M",
+          "TD MATHS0<br>15h15 - 17h15<br>SALLE M11"
+        ]
+      }
+    ],
+    groupeB: [
+      {
+        day: "Lundi",
+        events: [
+          "Réunion de pré rentrées<br>Portail ST<br>13h - 15h / AMPHI PV",
+          "Atelier d’intégration<br>15h15 - 17h15<br>SALLE M12"
+        ]
+      },
+      {
+        day: "Mardi",
+        events: [
+          "TD PHYSIQUE<br>10h15 - 12h15<br>SALLE P21",
+          "Présentation Licence Maths<br>13h – 15h<br>AMPHI PV"
+        ]
+      },
+      {
+        day: "Mercredi",
+        events: [
+          "FORUM D’ACCUEIL<br>9h30 – 13h<br>BU",
+          "TD PHYSIQUE<br>15h15 - 17h15<br>SALLE P21"
+        ]
+      }
+    ]
+  };
+
+  let currentGroup = 'groupeA';
+  let currentIndex = 0;
+
+  function renderDay() {
+    const dayData = data[currentGroup][currentIndex];
+    const container = document.getElementById('day-content');
+    let html = `<h3>${dayData.day}</h3>`;
+    dayData.events.forEach(event => {
+      html += `<div class="event">${event}</div>`;
+    });
+    container.innerHTML = html;
+  }
+
+  function nextDay() {
+    currentIndex = (currentIndex + 1) % data[currentGroup].length;
+    renderDay();
+  }
+
+  function prevDay() {
+    currentIndex = (currentIndex - 1 + data[currentGroup].length) % data[currentGroup].length;
+    renderDay();
+  }
+
+  document.getElementById('group-select').addEventListener('change', function() {
+    currentGroup = this.value;
+    currentIndex = 0;
+    renderDay();
+  });
+
+  // initial display
+  renderDay();
+</script>
 
 </body>
 </html>
