@@ -3,33 +3,67 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Emploi du temps compact</title>
+<title>Emploi du temps stylé</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
   body {
-    font-family: Arial, sans-serif;
+    font-family: 'Bebas Neue', sans-serif;
     max-width: 400px;
     margin: auto;
     padding: 10px;
     text-align: center;
+    background: #fff;
+    color: #333;
   }
   select {
     margin: 10px;
     padding: 5px;
-    font-size: 16px;
+    font-size: 18px;
+    font-family: 'Bebas Neue', sans-serif;
   }
   .day-container {
-    background: #f0f0f0;
+    background: #f9f9f9;
     padding: 15px;
-    border-radius: 8px;
-    min-height: 150px;
+    border-radius: 10px;
+    min-height: 180px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+  }
+  .day-container.show {
+    opacity: 1;
   }
   h3 {
     margin-top: 0;
+    font-size: 26px;
+    letter-spacing: 1px;
+  }
+  .date {
+    font-size: 18px;
+    color: #777;
+    margin-bottom: 10px;
   }
   .event {
     margin: 8px 0;
     line-height: 1.4;
-    font-size: 15px;
+    font-size: 16px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+  .reunion { background: #ff7f50; }
+  .td { background: #1e90ff; }
+  .forum { background: #32cd32; }
+  .atelier { background: #ffcc00; }
+  @media (max-width: 600px) {
+    .event { font-size: 14px; }
+    h3 { font-size: 22px; }
   }
   .nav-buttons {
     margin-top: 10px;
@@ -37,8 +71,9 @@
   .nav-buttons button {
     padding: 5px 10px;
     margin: 0 10px;
-    font-size: 16px;
+    font-size: 20px;
     cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
   }
 </style>
 </head>
@@ -65,49 +100,55 @@
     groupeA: [
       {
         day: "Lundi",
+        date: "1er Septembre",
         events: [
-          "Réunion de pré rentrées<br>Portail ST (OUI SI)<br>11h15 – 12h15 / AMPHI INFO",
-          "Réunion de pré rentrées<br>Portail ST<br>Noms de A à L inclus<br>13h - 15h / AMPHI PV",
-          "Réunion de pré rentrées<br>Portail ST<br>Noms de A à Z inclus<br>15h15 - 17h15 / AMPHI PV"
+          { text: "Réunion de pré rentrées<br>Portail ST (OUI SI)<br>11h15 – 12h15 / AMPHI INFO", type: "reunion" },
+          { text: "Réunion de pré rentrées<br>Portail ST<br>Noms A à L<br>13h - 15h / AMPHI PV", type: "reunion" },
+          { text: "Réunion de pré rentrées<br>Portail ST<br>Noms A à Z<br>15h15 - 17h15 / AMPHI PV", type: "reunion" }
         ]
       },
       {
         day: "Mardi",
+        date: "2 Septembre",
         events: [
-          "TD MATHS0<br>10h15 - 12h15<br>SALLE M11",
-          "Présentation Licence Physique<br>13h – 15h<br>AMPHI PV",
-          "Présentation Licence Chimie<br>15h15 – 17h15<br>AMPHI PV"
+          { text: "TD MATHS0<br>10h15 - 12h15<br>SALLE M11", type: "td" },
+          { text: "Présentation Licence Physique<br>13h – 15h<br>AMPHI PV", type: "reunion" },
+          { text: "Présentation Licence Chimie<br>15h15 – 17h15<br>AMPHI PV", type: "reunion" }
         ]
       },
       {
         day: "Mercredi",
+        date: "3 Septembre",
         events: [
-          "FORUM D’ACCUEIL<br>9h30 – 13h<br>BU",
-          "ATELIERS OBLIGATOIRES<br>10h15 – 11h15<br>Bâtiment M",
-          "TD MATHS0<br>15h15 - 17h15<br>SALLE M11"
+          { text: "FORUM D’ACCUEIL<br>9h30 – 13h<br>BU", type: "forum" },
+          { text: "ATELIERS OBLIGATOIRES<br>10h15 – 11h15<br>Bâtiment M", type: "atelier" },
+          { text: "TD MATHS0<br>15h15 - 17h15<br>SALLE M11", type: "td" }
         ]
       }
     ],
     groupeB: [
       {
         day: "Lundi",
+        date: "1er Septembre",
         events: [
-          "Réunion de pré rentrées<br>Portail ST<br>13h - 15h / AMPHI PV",
-          "Atelier d’intégration<br>15h15 - 17h15<br>SALLE M12"
+          { text: "Réunion de pré rentrées<br>Portail ST<br>13h - 15h / AMPHI PV", type: "reunion" },
+          { text: "Atelier d’intégration<br>15h15 - 17h15<br>SALLE M12", type: "atelier" }
         ]
       },
       {
         day: "Mardi",
+        date: "2 Septembre",
         events: [
-          "TD PHYSIQUE<br>10h15 - 12h15<br>SALLE P21",
-          "Présentation Licence Maths<br>13h – 15h<br>AMPHI PV"
+          { text: "TD PHYSIQUE<br>10h15 - 12h15<br>SALLE P21", type: "td" },
+          { text: "Présentation Licence Maths<br>13h – 15h<br>AMPHI PV", type: "reunion" }
         ]
       },
       {
         day: "Mercredi",
+        date: "3 Septembre",
         events: [
-          "FORUM D’ACCUEIL<br>9h30 – 13h<br>BU",
-          "TD PHYSIQUE<br>15h15 - 17h15<br>SALLE P21"
+          { text: "FORUM D’ACCUEIL<br>9h30 – 13h<br>BU", type: "forum" },
+          { text: "TD PHYSIQUE<br>15h15 - 17h15<br>SALLE P21", type: "td" }
         ]
       }
     ]
@@ -119,11 +160,18 @@
   function renderDay() {
     const dayData = data[currentGroup][currentIndex];
     const container = document.getElementById('day-content');
-    let html = `<h3>${dayData.day}</h3>`;
-    dayData.events.forEach(event => {
-      html += `<div class="event">${event}</div>`;
-    });
-    container.innerHTML = html;
+    container.classList.remove('show');
+    setTimeout(() => {
+      let html = `<h3>${dayData.day}</h3><div class="date">${dayData.date}</div>`;
+      dayData.events.forEach(event => {
+        html += `<div class="event">
+                   <div class="dot ${event.type}"></div>
+                   <div>${event.text}</div>
+                 </div>`;
+      });
+      container.innerHTML = html;
+      container.classList.add('show');
+    }, 200);
   }
 
   function nextDay() {
@@ -142,7 +190,7 @@
     renderDay();
   });
 
-  // initial display
+  // Initial display
   renderDay();
 </script>
 
