@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emploi du temps universitaire</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    select {
+      margin-bottom: 20px;
+      padding: 5px;
+      font-size: 16px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+      font-size: 14px;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Emploi du temps - du 1 au 12 septembre</h2>
+  
+  <label for="group-select">Choisissez votre groupe :</label>
+  <select id="group-select">
+    <option value="groupeA">Groupe A</option>
+    <option value="groupeB">Groupe B</option>
+  </select>
+
+  <!-- Semaine 1 -->
+  <div id="groupeA" class="edt">
+    <h3>Semaine 1 (1 au 5 sept) - Groupe A</h3>
+    <table>
+      <tr><th>Jour</th><th>8h-10h</th><th>10h-12h</th><th>14h-16h</th><th>16h-18h</th></tr>
+      <tr><td>Lundi</td><td>Maths</td><td>Physique</td><td>Libre</td><td>Info</td></tr>
+      <tr><td>Mardi</td><td>Libre</td><td>Chimie</td><td>TP Info</td><td>Libre</td></tr>
+      <tr><td>Mercredi</td><td>Maths</td><td>Libre</td><td>Physique</td><td>Libre</td></tr>
+      <tr><td>Jeudi</td><td>Libre</td><td>Libre</td><td>Maths</td><td>Chimie</td></tr>
+      <tr><td>Vendredi</td><td>TP Physique</td><td>Libre</td><td>Info</td><td>Libre</td></tr>
+    </table>
+
+    <h3>Semaine 2 (8 au 12 sept) - Groupe A</h3>
+    <table>
+      <tr><th>Jour</th><th>8h-10h</th><th>10h-12h</th><th>14h-16h</th><th>16h-18h</th></tr>
+      <tr><td>Lundi</td><td>Chimie</td><td>Libre</td><td>Maths</td><td>TP Info</td></tr>
+      <tr><td>Mardi</td><td>Physique</td><td>Maths</td><td>Libre</td><td>Info</td></tr>
+      <tr><td>Mercredi</td><td>Libre</td><td>Chimie</td><td>TP Physique</td><td>Libre</td></tr>
+      <tr><td>Jeudi</td><td>Info</td><td>Libre</td><td>Physique</td><td>Libre</td></tr>
+      <tr><td>Vendredi</td><td>Libre</td><td>TP Info</td><td>Maths</td><td>Chimie</td></tr>
+    </table>
+  </div>
+
+  <div id="groupeB" class="edt hidden">
+    <h3>Semaine 1 (1 au 5 sept) - Groupe B</h3>
+    <table>
+      <tr><th>Jour</th><th>8h-10h</th><th>10h-12h</th><th>14h-16h</th><th>16h-18h</th></tr>
+      <tr><td>Lundi</td><td>Physique</td><td>Libre</td><td>Maths</td><td>TP Chimie</td></tr>
+      <tr><td>Mardi</td><td>Maths</td><td>Chimie</td><td>Libre</td><td>Info</td></tr>
+      <tr><td>Mercredi</td><td>Libre</td><td>TP Info</td><td>Physique</td><td>Libre</td></tr>
+      <tr><td>Jeudi</td><td>Maths</td><td>Libre</td><td>Libre</td><td>Chimie</td></tr>
+      <tr><td>Vendredi</td><td>Info</td><td>Physique</td><td>Libre</td><td>TP Physique</td></tr>
+    </table>
+
+    <h3>Semaine 2 (8 au 12 sept) - Groupe B</h3>
+    <table>
+      <tr><th>Jour</th><th>8h-10h</th><th>10h-12h</th><th>14h-16h</th><th>16h-18h</th></tr>
+      <tr><td>Lundi</td><td>Libre</td><td>Maths</td><td>Chimie</td><td>Physique</td></tr>
+      <tr><td>Mardi</td><td>TP Info</td><td>Libre</td><td>Maths</td><td>Chimie</td></tr>
+      <tr><td>Mercredi</td><td>Info</td><td>Physique</td><td>Libre</td><td>TP Chimie</td></tr>
+      <tr><td>Jeudi</td><td>Physique</td><td>Libre</td><td>Info</td><td>Libre</td></tr>
+      <tr><td>Vendredi</td><td>Maths</td><td>TP Physique</td><td>Libre</td><td>Chimie</td></tr>
+    </table>
+  </div>
+
+  <script>
+    const select = document.getElementById('group-select');
+    const edts = document.querySelectorAll('.edt');
+    select.addEventListener('change', () => {
+      edts.forEach(div => div.classList.add('hidden'));
+      document.getElementById(select.value).classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
 
