@@ -1,208 +1,154 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Emploi du temps UCA</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
-<style>
-  body {
-    font-family: 'Bebas Neue', sans-serif;
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 15px;
-    background: #fff;
-    color: #333;
-    font-size: 20px;
-  }
-  select {
-    margin: 15px 0;
+<div style="max-width:800px; margin:20px auto; background:#fff; padding:15px; border:1px solid #ddd; border-radius:12px; box-sizing:border-box; font-size:18px; color:#333;">
+<h2 style="margin-top:0; font-size:24px; color:#007ba3;">Emploi du temps</h2>
+<select id="group-select" style="
+    margin: 15px 0 30px 0;
     padding: 10px 16px;
-    font-size: 22px;
+    font-size: 18px;
     border: 2px solid #0095c8;
     border-radius: 10px;
     background-color: #f0f9ff;
     cursor: pointer;
+    min-width: 200px;
     display: block;
-  }
-  select:hover, select:focus {
-    background-color: #d0e8ff;
-  }
-  .day-nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    margin-bottom: 20px;
-    user-select: none;
-  }
-  .day-nav button {
-    background: #0095c8;
-    border: none;
-    color: white;
-    font-size: 36px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .day-nav button:hover {
-    background: #007ba3;
-    transform: scale(1.15);
-  }
-  .day-nav .date {
-    font-size: 28px;
-    color: #005f82;
-  }
-  .day-container {
+  "><option value="groupeA">Groupe A</option><option value="groupeB">Groupe B</option> </select>
+
+<div style="display: flex; align-items: center; justify-content: center; gap: 40px; margin-bottom: 20px;"><button onclick="prevDay()" style="
+      background-color: #0095c8;
+      border: none;
+      color: white;
+      width: 50px;
+      height: 50px;
+      padding: 0;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(0,149,200,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s, transform 0.2s;
+    "><svg style="width: 20px; height: 20px; fill: white;" viewbox="0 0 24 24"> <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"></path> </svg></button>
+
+<div id="current-date" style="font-size: 22px; font-weight: bold; color: #005f82; min-width: 160px; text-align: center;"></div>
+<button onclick="nextDay()" style="
+      background-color: #0095c8;
+      border: none;
+      color: white;
+      width: 50px;
+      height: 50px;
+      padding: 0;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(0,149,200,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s, transform 0.2s;
+    "><svg style="width: 20px; height: 20px; fill: white;" viewbox="0 0 24 24"> <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"></path> </svg></button></div>
+
+<div style="
     background: #e6f3fb;
     border: 3px solid #0095c8;
     border-radius: 15px;
     padding: 20px 30px;
     box-shadow: 0 0 12px rgba(0, 149, 200, 0.35);
-    text-align: center;
-  }
-  h3 {
-    font-size: 36px;
-    margin: 0 0 15px;
-    color: #007ba3;
-  }
-  .event {
-    margin: 15px 0;
-    line-height: 1.4;
-    font-size: 20px;
-    border-radius: 12px;
-    padding: 14px 18px;
-    color: #fff;
-    text-align: left;
-  }
-  .event.reunion { background: #0095c8; }
-  .event.td      { background: #007ba3; }
-  .event.forum   { background: #00a888; }
-  .event.atelier { background: #ffcc00; color: #333; }
-  .room-icon {
-    width: 24px;
-    height: 24px;
-    vertical-align: middle;
-    margin: -5px 8px 0 0;
-  }
-  @media (max-width: 700px) {
-    body { font-size: 18px; }
-    .day-nav .date { font-size: 22px; }
-    .day-nav button { font-size: 30px; width: 50px; height: 50px; }
-    h3 { font-size: 28px; }
-    .event { font-size: 18px; }
-  }
-</style>
-</head>
-<body>
-
-<h2>Emploi du temps</h2>
-
-<select id="group-select">
-  <option value="groupeA">Groupe A</option>
-  <option value="groupeB">Groupe B</option>
-</select>
-
-<div class="day-nav">
-  <button onclick="prevDay()" aria-label="Jour précédent">&#x276E;</button>
-  <div class="date" id="date-display"></div>
-  <button onclick="nextDay()" aria-label="Jour suivant">&#x276F;</button>
+    overflow: hidden;
+  ">
+<div id="day-content" style="width:100%; transition: transform 0.2s ease-in-out;"></div>
 </div>
-
-<div class="day-container" id="day-content"></div>
-
+</div>
 <script>
 const data = {
   groupeA: [
-    {
-      day: "Lundi",
-      date: "1er Septembre",
-      events: [
-        { text: `Réunion de pré rentrées<br>Portail ST (OUI SI)<br>11h15 – 12h15 / <img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" class="room-icon" alt="Salle"> AMPHI INFO`, type: "reunion" },
-        { text: `Réunion de pré rentrées<br>Portail ST<br>Noms de A à L inclus<br>13h - 15h / <img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" class="room-icon" alt="Salle"> AMPHI PV`, type: "reunion" },
-        { text: `Réunion de pré rentrées<br>Portail ST<br>Noms de A à Z inclus<br>15h15 - 17h15 / <img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" class="room-icon" alt="Salle"> AMPHI PV`, type: "reunion" }
-      ]
-    },
-    {
-      day: "Mardi",
-      date: "2 Septembre",
-      events: [
-        { text: `TD MATHS0<br>10h15 - 12h15<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" class="room-icon" alt="Salle"> SALLE M11`, type: "td" },
-        { text: `Présentation Licence Physique<br>13h – 15h<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" class="room-icon" alt="Salle"> AMPHI PV`, type: "reunion" },
-        { text: `Présentation Licence Chimie<br>15h15 – 17h15<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" class="room-icon" alt="Salle"> AMPHI PV`, type: "reunion" }
-      ]
-    },
-    {
-      day: "Mercredi",
-      date: "3 Septembre",
-      events: [
-        { text: `FORUM D’ACCUEIL<br>9h30–13h<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" class="room-icon" alt="Salle"> BU`, type: "forum" },
-        { text: `ATELIERS OBLIGATOIRES<br>10h15–11h15<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" class="room-icon" alt="Salle"> Batiment M`, type: "atelier" },
-        { text: `TD MATHS0<br>15h15 - 17h15<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" class="room-icon" alt="Salle"> SALLE M11`, type: "td" }
-      ]
-    }
+    { day: "Lundi", date: "1er Septembre", events: [
+      `Réunion de pré rentrées<br>Portail ST (OUI SI)<br>11h15 – 12h15 / <img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" style="width:20px; vertical-align:middle; filter:brightness(0) saturate(100%);"> AMPHI INFO`,
+      `Réunion de pré rentrées<br>Portail ST<br>Noms de A à L inclus<br>13h - 15h / <img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" style="width:20px; vertical-align:middle; filter:brightness(0) saturate(100%);"> AMPHI PV`,
+      `Réunion de pré rentrées<br>Portail ST<br>Noms de A à Z inclus<br>15h15 - 17h15 / <img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" style="width:20px; vertical-align:middle; filter:brightness(0) saturate(100%);"> AMPHI PV`
+    ]},
+    { day: "Mardi", date: "2 Septembre", events: [
+      `TD MATHS0<br>10h15 - 12h15<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" style="width:20px; vertical-align:middle; filter:brightness(0) saturate(100%);"> SALLE M11`,
+      `Présentation Licence Physique<br>13h – 15h<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" style="width:20px; vertical-align:middle; filter:brightness(0) saturate(100%);"> AMPHI PV`,
+      `Présentation Licence Chimie<br>15h15 – 17h15<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" style="width:20px; vertical-align:middle; filter:brightness(0) saturate(100%);"> AMPHI PV`
+    ]},
+    { day: "Mercredi", date: "3 Septembre", events: [
+      `FORUM D’ACCUEIL<br>9h30–13h<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" style="width:20px; vertical-align:middle; filter:brightness(0) saturate(100%);"> BU`,
+      `ATELIERS OBLIGATOIRES<br>10h15–11h15<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" style="width:20px; vertical-align:middle; filter:brightness(0) saturate(100%);"> Batiment M`,
+      `TD MATHS0<br>15h15 - 17h15<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" style="width:20px; vertical-align:middle; filter:brightness(0) saturate(100%);"> SALLE M11`
+    ]}
   ],
   groupeB: [
-    {
-      day: "Lundi",
-      date: "1er Septembre",
-      events: [
-        { text: `Réunion de pré rentrées<br>Portail ST<br>13h - 15h / <img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" class="room-icon" alt="Salle"> AMPHI PV`, type: "reunion" },
-        { text: `Atelier d’intégration<br>15h15 - 17h15<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" class="room-icon" alt="Salle"> SALLE M12`, type: "atelier" }
-      ]
-    },
-    {
-      day: "Mardi",
-      date: "2 Septembre",
-      events: [
-        { text: `TD PHYSIQUE<br>10h15 - 12h15<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" class="room-icon" alt="Salle"> SALLE P21`, type: "td" },
-        { text: `Présentation Licence Maths<br>13h – 15h<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" class="room-icon" alt="Salle"> AMPHI PV`, type: "reunion" }
-      ]
-    },
-    {
-      day: "Mercredi",
-      date: "3 Septembre",
-      events: [
-        { text: `FORUM D’ACCUEIL<br>9h30–13h<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" class="room-icon" alt="Salle"> BU`, type: "forum" },
-        { text: `TD PHYSIQUE<br>15h15 - 17h15<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" class="room-icon" alt="Salle"> SALLE P21`, type: "td" }
-      ]
-    }
+    { day: "Lundi", date: "1er Septembre", events: [
+      `Réunion de pré rentrées<br>Portail ST<br>13h - 15h / <img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" style="width:20px; vertical-align:middle; filter:brightness(0) saturate(100%);"> AMPHI PV`,
+      `Atelier d’intégration<br>15h15 - 17h15<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" style="width:20px; vertical-align:middle; filter:brightness(0) saturate(100%);"> SALLE M12`
+    ]},
+    { day: "Mardi", date: "2 Septembre", events: [
+      `TD PHYSIQUE<br>10h15 - 12h15<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" style="width:20px; vertical-align:middle; filter:brightness(0) saturate(100%);"> SALLE P21`,
+      `Présentation Licence Maths<br>13h – 15h<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" style="width:20px; vertical-align:middle; filter:brightness(0) saturate(100%);"> AMPHI PV`
+    ]},
+    { day: "Mercredi", date: "3 Septembre", events: [
+      `FORUM D’ACCUEIL<br>9h30–13h<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" style="width:20px; vertical-align:middle; filter:brightness(0) saturate(100%);"> BU`,
+      `TD PHYSIQUE<br>15h15 - 17h15<br><img src="https://univ-cotedazur.fr/medias/photo/position_1689063333149-png?ID_FICHE=1202336" style="width:20px; vertical-align:middle; filter:brightness(0) saturate(100%);"> SALLE P21`
+    ]}
   ]
 };
 
 let currentGroup = 'groupeA';
 let currentIndex = 0;
+let sliding = false;
 
-function renderDay() {
-  const dayData = data[currentGroup][currentIndex];
-  document.getElementById('date-display').textContent = `${dayData.day} ${dayData.date}`;
-  document.getElementById('day-content').innerHTML = 
-    `<h3>${dayData.day}</h3>` +
-    dayData.events.map(e => `<div class="event ${e.type}">${e.text}</div>`).join('');
+function renderDay(direction = 'right') {
+  if (sliding) return;
+  sliding = true;
+  const content = document.getElementById('day-content');
+  content.style.transition = 'transform 0.2s ease-in-out';
+  content.style.transform = `translateX(${direction === 'right' ? '-100%' : '100%'})`;
+  setTimeout(() => {
+    const dayData = data[currentGroup][currentIndex];
+    document.getElementById('current-date').textContent = `${dayData.day} - ${dayData.date}`;
+    let html = "";
+    dayData.events.forEach(event => {
+      let bg = '#999', color = '#fff';
+      if (event.includes('Réunion')) { bg='#0095c8'; }
+      else if (event.includes('TD')) { bg='#007ba3'; }
+      else if (event.includes('FORUM')) { bg='#00a888'; }
+      else if (event.includes('Atelier') || event.includes('ATELIER')) { bg='#ffcc00'; color='#333'; }
+      html += `<div style="
+        margin:14px 0; 
+        line-height:1.5; 
+        font-size:18px; 
+        border-radius:12px; 
+        padding:14px 18px; 
+        color:${color}; 
+        background:${bg}; 
+        box-shadow:0 3px 6px rgba(0,0,0,0.1);
+        word-break:break-word;
+      ">${event}</div>`;
+    });
+    content.innerHTML = html;
+    content.style.transition = 'none';
+    content.style.transform = `translateX(${direction === 'right' ? '100%' : '-100%'})`;
+    setTimeout(() => {
+      content.style.transition = 'transform 0.2s ease-in-out';
+      content.style.transform = 'translateX(0)';
+      sliding = false;
+    }, 20);
+  }, 200);
 }
 
 function nextDay() {
   currentIndex = (currentIndex + 1) % data[currentGroup].length;
-  renderDay();
+  renderDay('right');
 }
+
 function prevDay() {
   currentIndex = (currentIndex - 1 + data[currentGroup].length) % data[currentGroup].length;
-  renderDay();
+  renderDay('left');
 }
 
-document.getElementById('group-select').addEventListener('change', function() {
+document.getElementById('group-select').addEventListener('change', function () {
   currentGroup = this.value;
   currentIndex = 0;
-  renderDay();
+  renderDay('right');
 });
 
-renderDay();
+renderDay('right');
 </script>
-
-</body>
-</html>
