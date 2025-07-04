@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Emploi du temps UCA</title>
+<title>Emploi du temps slide</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
   body {
@@ -24,7 +24,7 @@
   .day-container {
     position: relative;
     overflow: hidden;
-    height: 230px;
+    height: 220px; /* fixe la hauteur pour le slide */
   }
   .day-content {
     position: absolute;
@@ -51,10 +51,10 @@
     border-radius: 6px;
     padding: 6px 8px;
   }
-  .event.reunion { background: #0095c8; color: #fff; }
-  .event.td      { background: #007ba3; color: #fff; }
-  .event.forum   { background: #00a888; color: #fff; }
-  .event.atelier { background: #ffcc00; color: #333; }
+  .reunion { background: #ff7f50; color: #fff; }
+  .td { background: #1e90ff; color: #fff; }
+  .forum { background: #32cd32; color: #fff; }
+  .atelier { background: #ffcc00; color: #333; }
   .room-icon {
     width: 20px;
     height: 20px;
@@ -199,6 +199,7 @@
     renderDay('left');
   });
 
+  // Initial render
   renderDay('left');
 </script>
 
