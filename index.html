@@ -8,24 +8,26 @@
 <style>
   body {
     font-family: 'Bebas Neue', sans-serif;
-    max-width: 420px;
-    margin: auto;
+    max-width: 800px; /* plus large */
+    margin: 20px auto;
     padding: 15px;
     background: #fff;
     color: #333;
-    font-size: 18px; /* taille globale plus grande */
+    font-size: 20px; /* taille globale plus grande */
   }
   select {
     margin: 15px 0;
-    padding: 8px 12px;
-    font-size: 20px;
+    padding: 10px 16px;
+    font-size: 22px;
     font-family: 'Bebas Neue', sans-serif;
     border: 2px solid #0095c8;
-    border-radius: 6px;
+    border-radius: 10px;
     outline-offset: 2px;
     cursor: pointer;
     background-color: #f0f9ff;
     transition: background-color 0.3s ease;
+    min-width: 220px;
+    display: block;
   }
   select:hover, select:focus {
     background-color: #d0e8ff;
@@ -34,109 +36,135 @@
   .day-container {
     position: relative;
     overflow: hidden;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
+    background: #e6f3fb; /* léger fond bleu */
+    border: 3px solid #0095c8;
+    border-radius: 15px;
+    padding: 20px 30px;
+    box-shadow: 0 0 12px rgba(0, 149, 200, 0.35);
   }
   .day-content {
     position: relative;
     width: 100%;
     transition: transform 0.2s ease-in-out;
     will-change: transform;
-    padding: 0 12px;
     box-sizing: border-box;
   }
   h3 {
     margin-top: 0;
-    font-size: 32px;
-    letter-spacing: 1px;
+    font-size: 36px;
+    letter-spacing: 2px;
+    color: #007ba3;
+    user-select: none;
   }
   .date {
-    font-size: 22px;
-    color: #555;
-    margin-bottom: 15px;
+    font-size: 24px;
+    color: #005f82;
+    margin-bottom: 18px;
+    user-select: none;
   }
   .event {
-    margin: 10px 0;
+    margin: 14px 0;
     line-height: 1.5;
-    font-size: 18px;
+    font-size: 20px;
     text-align: left;
-    border-radius: 8px;
-    padding: 10px 14px;
+    border-radius: 12px;
+    padding: 14px 18px;
     color: #fff;
     word-break: break-word;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    user-select: text;
   }
   .event.reunion { background: #0095c8; }
   .event.td      { background: #007ba3; }
   .event.forum   { background: #00a888; }
   .event.atelier { background: #ffcc00; color: #333; }
   .room-icon {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     vertical-align: middle;
-    margin: -4px 6px 0 0;
+    margin: -5px 8px 0 0;
     filter: brightness(0) saturate(100%) invert(13%) sepia(12%) saturate(1023%) hue-rotate(170deg) brightness(95%) contrast(90%);
   }
 
-  /* Boutons flèches centrés fixes sous le contenu */
+  /* Boutons flèches stylisés, arrondis, centrés et fixes */
   .nav-buttons {
     display: flex;
     justify-content: center;
-    gap: 40px;
+    gap: 60px;
     user-select: none;
   }
   .nav-buttons button {
     background-color: #0095c8;
     border: none;
     color: white;
-    font-size: 36px;
-    width: 60px;
-    height: 60px;
+    font-size: 42px;
+    width: 75px;
+    height: 75px;
     border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,149,200,0.3);
+    box-shadow: 0 6px 14px rgba(0,149,200,0.35);
     transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .nav-buttons button:hover {
     background-color: #007ba3;
-    transform: scale(1.1);
+    transform: scale(1.15);
   }
   .nav-buttons button:focus {
-    outline: 3px solid #ffcc00;
-    outline-offset: 3px;
+    outline: 4px solid #ffcc00;
+    outline-offset: 4px;
+  }
+  /* Flèches plus "arrondies" : utiliser SVG pour plus de style */
+  .nav-buttons button svg {
+    width: 30px;
+    height: 30px;
+    fill: white;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
     body {
       max-width: 100%;
-      padding: 10px;
-      font-size: 16px;
+      padding: 12px;
+      font-size: 18px;
     }
     select {
-      font-size: 18px;
-      padding: 6px 10px;
+      font-size: 20px;
+      padding: 8px 14px;
+      min-width: 180px;
     }
     h3 {
-      font-size: 26px;
+      font-size: 28px;
     }
     .date {
-      font-size: 18px;
-      margin-bottom: 12px;
+      font-size: 20px;
+      margin-bottom: 14px;
     }
     .event {
       font-size: 16px;
-      margin: 8px 0;
-      padding: 8px 12px;
+      margin: 12px 0;
+      padding: 10px 14px;
     }
     .room-icon {
-      width: 18px;
-      height: 18px;
-      margin-right: 4px;
-      margin-top: -3px;
+      width: 20px;
+      height: 20px;
+      margin-right: 6px;
+      margin-top: -4px;
+    }
+    .nav-buttons {
+      gap: 40px;
     }
     .nav-buttons button {
-      font-size: 28px;
-      width: 48px;
-      height: 48px;
-      gap: 30px;
+      font-size: 36px;
+      width: 60px;
+      height: 60px;
+    }
+    .nav-buttons button svg {
+      width: 22px;
+      height: 22px;
     }
   }
 </style>
@@ -155,8 +183,16 @@
 </div>
 
 <div class="nav-buttons">
-  <button onclick="prevDay()" aria-label="Jour précédent">⬅</button>
-  <button onclick="nextDay()" aria-label="Jour suivant">➡</button>
+  <button onclick="prevDay()" aria-label="Jour précédent" title="Jour précédent">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/>
+    </svg>
+  </button>
+  <button onclick="nextDay()" aria-label="Jour suivant" title="Jour suivant">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
+    </svg>
+  </button>
 </div>
 
 <script>
